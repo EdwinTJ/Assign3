@@ -1,0 +1,15 @@
+# Run this commands in the terminal to run the program
+
+# To build the project
+gradle build
+
+# To run the project with args
+run {
+    standardInput = System.in
+}
+
+# To run the project with java -jar
+java -jar build/libs/Assn3.jar
+
+# To clean the project
+gradle clean

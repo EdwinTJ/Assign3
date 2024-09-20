@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'Assn3'
+        )
+    }
+    archiveBaseName = 'Assn3'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+}
+
+application {
+    mainClassName = 'Assn3'
+}
