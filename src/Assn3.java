@@ -30,13 +30,12 @@ public class Assn3 {
                 String leftArgument = parts[0].trim();
                 String rightArgument = parts[1].trim();
 
-                System.out.println("Left argument: " + leftArgument);
-                System.out.println("Right argument: " + rightArgument);
-
                 // Execute both left and right commands with pipe handling
                 executePipeCommand(leftArgument, rightArgument, currentDir);
             } else if (input.startsWith("^")) {
                 // Handle history command
+
+                System.out.println("input: " + input);
                 executeHistoryCommand(input, currentDir);
             } else {
                 // Regular commands
@@ -132,16 +131,50 @@ public class Assn3 {
     }
 
     private static void executeHistoryCommand(String input, String currentDir) {
-        String[] tokens = input.trim().split("\\s+");
+//        String[] tokens = input.trim().split("\\s+");
+        String[] tokens = splitCommand(input);
+        String homeDir = System.getProperty("user.home");
+
         if (tokens.length > 1) {
             try {
-                int index = Integer.parseInt(tokens[1].trim()) - 1;
-                if (index >= 0 && index < history.size()) {
-                    String historyCommand = history.get(index);
-                    System.out.println(historyCommand);
-                    executeCommand(historyCommand, currentDir);
-                } else {
-                    System.out.println("Invalid history index.");
+                if (tokens.length == 0) {
+                    System.out.println("Index Not Valid");
+                };
+
+                String command = tokens[0];
+                System.out.println("Command " + command);
+                switch (command) {
+                    case "exit":
+                        return;
+                    case "ptime":
+                        System.out.printf("Total time in child processes: %.4f seconds\n", totalExecutionTime / 1000.0);
+                        break;
+                    case "history":
+                        printHistory();
+                        break;
+                    case "list":
+                        listFiles(currentDir);
+                        break;
+                    case "cd":
+                        currentDir = changeDirectory(tokens, currentDir, homeDir);
+                        break;
+                    case "mdir":
+                        if (tokens.length > 1) {
+                            createDirectory(tokens[1], currentDir);
+                        } else {
+                            System.out.println("mdir: missing directory name.");
+                        }
+                        break;
+                    case "rdir":
+                        if (tokens.length > 1) {
+                            removeDirectory(tokens[1], currentDir);
+                        } else {
+                            System.out.println("rdir: missing directory name.");
+                        }
+                        break;
+                    default:
+                        executeCommand(input, currentDir);
+                        break;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid history index.");
